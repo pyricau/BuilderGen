@@ -97,10 +97,30 @@ public class ModelBuilder {
 
 			JMethod buildMethod = builderClass.method(JMod.PUBLIC, buildableClass, "build");
 
+			JDocComment javadoc = buildMethod.javadoc() //
+					.append("Creates ") //
+					.append(buildableClass) //
+					.append(" instances based on this builder fields.<br />\n") //
+					.append("<br />\n") //
+					.append("The builder keeps its state after this method has been called.");
+
+			javadoc.addReturn() //
+					.append("a new ") //
+					.append(buildableClass) //
+					.append(" instance.") //
+			;
+
 			List<? extends TypeMirror> thrownTypes = constructor.getThrownTypes();
 			for (TypeMirror thrownType : thrownTypes) {
 				JClass thrownClass = codeModel.ref(thrownType.toString());
 				buildMethod._throws(thrownClass);
+
+				javadoc.addThrows(thrownClass) //
+						.append(" when ") //
+						.append(buildableClass)//
+						.append("'s constructor throws this exception") //
+				;
+
 			}
 
 			JBlock buildBody = buildMethod.body();
@@ -115,6 +135,16 @@ public class ModelBuilder {
 
 			JMethod createMethod = builderClass.method(JMod.PUBLIC | JMod.STATIC, builderClass, "create");
 			createMethod.body()._return(JExpr._new(builderClass));
+
+			createMethod.javadoc() //
+					.append("Static factory method for ") //
+					.append(builderClass) //
+					.append(" instances.") //
+					.addReturn() //
+					.append("a new ") //
+					.append(builderClass) //
+					.append("instance") //
+			;
 
 			builderClass //
 					.javadoc() //
@@ -140,7 +170,8 @@ public class ModelBuilder {
 					.append(" method.\n") //
 					.append("Each call will return a new instance.<br />\n") //
 					.append("<br />\n") //
-					.append("You can call setters multiple times, and use this builder as an object template.");
+					.append("You can call setters multiple times, and use this builder as an object template.") //
+			;
 		}
 		return codeModel;
 	}
