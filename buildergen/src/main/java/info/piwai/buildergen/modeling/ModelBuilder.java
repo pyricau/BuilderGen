@@ -79,7 +79,7 @@ public class ModelBuilder {
 				JDocComment javadoc = setter.javadoc() //
 						.append("Setter for the ") //
 						.append(paramName) //
-						.append(" paramater.");
+						.append(" parameter.");
 				
 				javadoc.addParam(setterParam) //
 						.append("the value for the ") //
