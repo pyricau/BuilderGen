@@ -1,11 +1,15 @@
+# BuilderGen
+
+## Intro
 BuilderGen uses APT and CoreModel to generate builders (following the Builder Pattern) at compile time.
 
-Steps
------
+## Steps
 
 * Configure your project to use BuilderGen annotation processing (no doc yet, please look at the example)
 * Add @Buildable to any class you wish.
 * A builder is automatically created.
+
+## Code example
 
 Suppose you have a MyBean class :
 
