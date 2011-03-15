@@ -34,6 +34,7 @@ BuilderGen automatically generates a PersonBuilder, and you can now do the follo
     
 If the class has multiple constructors, you should annotate the one to use with @Build.
 
+## Generated code
 
 Have a look at the nicely generated PersonBuilder code :
 
