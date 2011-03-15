@@ -39,7 +39,7 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 
 /**
- * Annotation processor that processes {@link Buildable} annotations, validate
+ * Annotation processor that processes {@link Buildable} annotations, validates
  * them and generates the corresponding {@link Builder}s.
  * 
  * @author Pierre-Yves Ricau (py.ricau at gmail.com)

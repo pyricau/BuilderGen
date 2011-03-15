@@ -22,14 +22,18 @@ import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Processor;
+import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.tools.Diagnostic;
 
 /**
  * Extends {@link AbstractProcessor} to override
  * {@link AbstractProcessor#getSupportedAnnotationTypes()}, enabling usage of
- * {@link SupportedAnnotationClasses} on a {@link Processor}.
+ * {@link SupportedAnnotationClasses} on a {@link Processor}.<br />
+ * <br />
+ * The main advantage over {@link SupportedAnnotationTypes} is that you can
+ * safely refactor the annotation names, without having to update strings.
  * 
- * @author Pierre-Yves Ricau
+ * @author Pierre-Yves Ricau (py.ricau at gmail.com)
  */
 public abstract class AnnotatedAbstractProcessor extends AbstractProcessor {
 
@@ -37,8 +41,9 @@ public abstract class AnnotatedAbstractProcessor extends AbstractProcessor {
 	 * If the processor class is annotated with
 	 * {@link SupportedAnnotationClasses} , return an unmodifiable set with the
 	 * set of strings corresponding to the array of classes of the annotation.
-	 * If the class is not so annotated, the
-	 * {@link AbstractProcessor#getSupportedAnnotationTypes()} method is called.
+	 * If the class is not annotated with {@link SupportedAnnotationClasses},
+	 * the {@link AbstractProcessor#getSupportedAnnotationTypes()} method is
+	 * called.
 	 * 
 	 * @return the names of the annotation classes supported by this processor,
 	 *         or {@link AbstractProcessor#getSupportedAnnotationTypes()} result
@@ -48,15 +53,15 @@ public abstract class AnnotatedAbstractProcessor extends AbstractProcessor {
 		SupportedAnnotationClasses sac = this.getClass().getAnnotation(SupportedAnnotationClasses.class);
 		if (sac == null) {
 			if (isInitialized())
-				processingEnv.getMessager().printMessage(
-						Diagnostic.Kind.WARNING,
-						"No " + SupportedAnnotationClasses.class.getSimpleName() + " annotation " + "found on " + this.getClass().getName()
-								+ ", returning parent method result.");
+				processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING, "No " + SupportedAnnotationClasses.class.getSimpleName() + " annotation " + "found on " + this.getClass().getName() + ", returning parent method result.");
 			return super.getSupportedAnnotationTypes();
 		} else
 			return arrayToSet(sac.value());
 	}
 
+	/**
+	 * Utility methods, copied from {@link AbstractProcessor} source code.
+	 */
 	private static Set<String> arrayToSet(Class<? extends Annotation>[] array) {
 		assert array != null;
 		Set<String> set = new HashSet<String>(array.length);
