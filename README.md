@@ -26,7 +26,7 @@ Suppose you have a Person class :
 	    // [...]
 	}
 
-BuilderGen generats a PersonBuilder, and you can now do the following : 
+BuilderGen automatically generates a PersonBuilder, and you can now do the following: 
 
     Person person = PersonBuilder.create().name("John Smith").age(42).build();
 
