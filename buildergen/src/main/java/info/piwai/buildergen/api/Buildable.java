@@ -38,7 +38,7 @@ import java.lang.annotation.Target;
  * 
  * will generate a MyBeanFactory class.<br />
  * <br />
- * The {@link Buildable} annotated element should be a class, it cannot be an enum. It should not be abstract.
+ * The {@link Buildable} annotated element should be a class. It cannot be an enum, nor an inner class. It should not be abstract.
  * <br />
  * 
  * The {@link Buildable} annotated class should have at least one not private constructor.
@@ -50,7 +50,7 @@ import java.lang.annotation.Target;
  * The generated builder implements the {@link Builder} interface.<br />
  * <br />
  * The generated builder has a public default constructor, and a create() static
- * factory method as well. This enable chained calls such as : MyBean myBean =
+ * factory method as well. This enables chained calls such as : MyBean myBean =
  * MyBeanBuilder.create().name("foo").build();
  * 
  * 
