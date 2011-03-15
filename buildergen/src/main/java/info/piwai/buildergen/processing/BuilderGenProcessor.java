@@ -18,8 +18,9 @@ package info.piwai.buildergen.processing;
 import info.piwai.buildergen.api.Buildable;
 import info.piwai.buildergen.api.Builder;
 import info.piwai.buildergen.generation.SourceGenerator;
+import info.piwai.buildergen.helper.ElementHelper;
 import info.piwai.buildergen.modeling.ModelBuilder;
-import info.piwai.buildergen.validation.TypeElementValidator;
+import info.piwai.buildergen.validation.BuildableValidator;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -89,7 +90,7 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 	}
 
 	private Set<TypeElement> validateElements(Set<TypeElement> annotatedElements) {
-		TypeElementValidator validator = new TypeElementValidator();
+		BuildableValidator validator = new BuildableValidator(processingEnv.getMessager(), new ElementHelper());
 
 		Set<TypeElement> validatedElements = new HashSet<TypeElement>();
 		for (TypeElement annotatedElement : annotatedElements) {
@@ -101,7 +102,7 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 	}
 
 	private JCodeModel buildModel(Set<TypeElement> validatedElements) throws JClassAlreadyExistsException {
-		ModelBuilder modelBuilder = new ModelBuilder();
+		ModelBuilder modelBuilder = new ModelBuilder(new ElementHelper());
 		return modelBuilder.build(validatedElements);
 	}
 
@@ -113,12 +114,11 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 
 	private void printError(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv, Exception e) {
 		/*
-		 * TODO Error printing might need a bit of cleanup Those tricks are used
+		 * TODO Error printing might need a bit of cleanup. Those tricks are used
 		 * so that we are sure the compilation error is given to the user.
 		 * Eclipse compiler wouldn't show it otherwise (as far as I can tell). I
 		 * know it sucks, any better solution is welcome.
 		 */
-
 		Messager messager = processingEnv.getMessager();
 		Throwable rootCause = e;
 		while (rootCause.getCause() != null) {

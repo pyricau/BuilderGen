@@ -38,11 +38,11 @@ import java.lang.annotation.Target;
  * 
  * will generate a MyBeanFactory class.<br />
  * <br />
- * The {@link Buildable} annotated element should be a class. It cannot be an enum, nor an inner class. It should not be abstract.
- * <br />
+ * The {@link Buildable} annotated element should be a class. It cannot be an
+ * enum, nor an inner class. It should not be abstract. <br />
  * 
- * The {@link Buildable} annotated class should have at least one not private constructor.
- * <br />
+ * The {@link Buildable} annotated class should have at least one not private
+ * constructor. <br />
  * If the {@link Buildable} annotated class have more than one not private
  * constructor, there should be one (and only one) of those constructors
  * annotated with {@link Build}.<br />

@@ -60,7 +60,7 @@ public abstract class AnnotatedAbstractProcessor extends AbstractProcessor {
 	}
 
 	/**
-	 * Utility methods, copied from {@link AbstractProcessor} source code.
+	 * Utility method, copied from {@link AbstractProcessor} source code.
 	 */
 	private static Set<String> arrayToSet(Class<? extends Annotation>[] array) {
 		assert array != null;
