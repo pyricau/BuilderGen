@@ -51,14 +51,14 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		try {
-			return processThrowing(annotations, roundEnv);
+			processThrowing(roundEnv);
 		} catch (Exception e) {
 			printError(annotations, roundEnv, e);
-			return true;
 		}
+		return true;
 	}
 
-	private boolean processThrowing(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) throws Exception {
+	private void processThrowing(RoundEnvironment roundEnv) throws Exception {
 		printCompileNote();
 
 		Set<TypeElement> annotatedElements = getBuildableAnnotatedElements(roundEnv);
@@ -70,8 +70,6 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 		JCodeModel codeModel = buildModel(validatedElements);
 
 		generateSources(codeModel);
-
-		return true;
 	}
 
 	private void printCompileNote() {
