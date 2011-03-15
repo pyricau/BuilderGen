@@ -1,7 +1,7 @@
 # BuilderGen
 
 ## Intro
-BuilderGen uses APT and CoreModel to generate builders (following the Josh Bloch's Builder Pattern) at compile time.
+BuilderGen uses APT and CoreModel to generate builders (following Josh Bloch's Builder Pattern) at compile time.
 
 ## Steps
 
