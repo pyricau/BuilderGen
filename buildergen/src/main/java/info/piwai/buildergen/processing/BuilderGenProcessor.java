@@ -16,6 +16,7 @@
 package info.piwai.buildergen.processing;
 
 import info.piwai.buildergen.api.Buildable;
+import info.piwai.buildergen.api.Builder;
 import info.piwai.buildergen.generation.SourceGenerator;
 import info.piwai.buildergen.modeling.ModelBuilder;
 import info.piwai.buildergen.validation.TypeElementValidator;
@@ -37,6 +38,12 @@ import javax.tools.Diagnostic.Kind;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 
+/**
+ * Annotation processor that processes {@link Buildable} annotations, validate
+ * them and generates the corresponding {@link Builder}s.
+ * 
+ * @author Pierre-Yves Ricau (py.ricau at gmail.com)
+ */
 @SupportedAnnotationClasses(Buildable.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
@@ -47,7 +54,7 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 			return processThrowing(annotations, roundEnv);
 		} catch (Exception e) {
 			printError(annotations, roundEnv, e);
-			return false;
+			return true;
 		}
 	}
 
@@ -64,7 +71,7 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 
 		generateSources(codeModel);
 
-		return false;
+		return true;
 	}
 
 	private void printCompileNote() {
