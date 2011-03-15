@@ -18,6 +18,7 @@ package info.piwai.buildergen.processing;
 import info.piwai.buildergen.api.Buildable;
 import info.piwai.buildergen.generation.SourceGenerator;
 import info.piwai.buildergen.modeling.ModelBuilder;
+import info.piwai.buildergen.validation.TypeElementValidator;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -53,28 +54,17 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 	public boolean processThrowing(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) throws Exception {
 		printCompileNote();
 
-		@SuppressWarnings("unchecked")
-		Set<TypeElement> annotatedElements = (Set<TypeElement>) roundEnv.getElementsAnnotatedWith(Buildable.class);
+		Set<TypeElement> annotatedElements = getBuildableAnnotatedElements(roundEnv);
 
 		printNumberOfBuildables(annotatedElements);
 
-		Set<TypeElement> validatedElements = new HashSet<TypeElement>();
-		// TODO Validation
-		// TODO Forbid inner types
-		for (TypeElement annotatedElement : annotatedElements) {
-			validatedElements.add(annotatedElement);
-		}
+		Set<TypeElement> validatedElements = validateElements(annotatedElements);
 
 		JCodeModel codeModel = buildModel(validatedElements);
-		
+
 		generateSources(codeModel);
 
 		return false;
-	}
-
-	private JCodeModel buildModel(Set<TypeElement> validatedElements) throws JClassAlreadyExistsException {
-		ModelBuilder modelBuild = new ModelBuilder();
-		return modelBuild.build(validatedElements);
 	}
 
 	private void printCompileNote() {
@@ -82,9 +72,32 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 		messager.printMessage(Diagnostic.Kind.NOTE, "BuilderGen is processing annotations");
 	}
 
+	private Set<TypeElement> getBuildableAnnotatedElements(RoundEnvironment roundEnv) {
+		@SuppressWarnings("unchecked")
+		Set<TypeElement> annotatedElements = (Set<TypeElement>) roundEnv.getElementsAnnotatedWith(Buildable.class);
+		return annotatedElements;
+	}
+
 	private void printNumberOfBuildables(Set<?> buildableElements) {
 		Messager messager = processingEnv.getMessager();
 		messager.printMessage(Kind.NOTE, "Found " + buildableElements.size() + " Buildable classes");
+	}
+
+	private Set<TypeElement> validateElements(Set<TypeElement> annotatedElements) {
+		TypeElementValidator validator = new TypeElementValidator();
+
+		Set<TypeElement> validatedElements = new HashSet<TypeElement>();
+		for (TypeElement annotatedElement : annotatedElements) {
+			if (validator.validate(annotatedElement)) {
+				validatedElements.add(annotatedElement);
+			}
+		}
+		return validatedElements;
+	}
+
+	private JCodeModel buildModel(Set<TypeElement> validatedElements) throws JClassAlreadyExistsException {
+		ModelBuilder modelBuilder = new ModelBuilder();
+		return modelBuilder.build(validatedElements);
 	}
 
 	private void generateSources(JCodeModel codeModel) throws IOException {
@@ -94,6 +107,13 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 	}
 
 	private void printError(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv, Exception e) {
+		/*
+		 * TODO Error printing might need a bit of cleanup Those tricks are used
+		 * so that we are sure the compilation error is given to the user.
+		 * Eclipse compiler wouldn't show it otherwise (as far as I can tell). I
+		 * know it sucks, any better solution is welcome.
+		 */
+
 		Messager messager = processingEnv.getMessager();
 		Throwable rootCause = e;
 		while (rootCause.getCause() != null) {
