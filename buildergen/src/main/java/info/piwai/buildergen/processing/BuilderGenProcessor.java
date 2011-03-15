@@ -58,7 +58,7 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 		}
 	}
 
-	public boolean processThrowing(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) throws Exception {
+	private boolean processThrowing(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) throws Exception {
 		printCompileNote();
 
 		Set<TypeElement> annotatedElements = getBuildableAnnotatedElements(roundEnv);
