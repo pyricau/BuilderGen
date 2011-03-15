@@ -7,8 +7,22 @@ Steps
 * Add @Buildable to any class you wish.
 * A builder is automatically created.
 
-Suppose you have a MyBean class with a constructor that has two params (param1 and param2).
+Suppose you have a MyBean class :
+
+	@Buildable
+	public class MyBean {
+		
+		private final int intField;
+		private final String stringField;
+		
+		MyBean(int intField, String stringField) {
+			this.intField = intField;
+			this.stringField = stringField;
+		}
+	// [...]
+	}
+
 
 You can do the following : 
 
-    MyBean bean = MyBeanBuilder.create().param1("hello").param2("world").build();
+    MyBean bean = MyBeanBuilder.create().intField(42).stringField("Hello World!").build();
