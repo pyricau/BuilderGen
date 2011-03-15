@@ -72,7 +72,7 @@
 						<configuration>
 							<classifier>api</classifier>
 							<includes>
-								<include>info/piwai/buildergen/annotation/**</include>
+								<include>info/piwai/buildergen/api/**</include>
 							</includes>
 						</configuration>
 					</execution>
