@@ -95,7 +95,7 @@ public class ModelBuilder {
 			}
 
 			JMethod buildMethod = builderClass.method(JMod.PUBLIC, buildableClass, "build");
-
+			
 			List<? extends TypeMirror> thrownTypes = constructor.getThrownTypes();
 			for (TypeMirror thrownType : thrownTypes) {
 				JClass thrownClass = codeModel.ref(thrownType.toString());

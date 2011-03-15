@@ -16,10 +16,19 @@
 package info.piwai.buildergen.api;
 
 /**
- * All generated builders from {@link Buildable} annotated classes implement this interface.
+ * All generated builders from {@link Buildable} annotated classes implement
+ * this interface.
  * 
  * @author Pierre-Yves Ricau (py.ricau at gmail.com)
  */
 public interface Builder<T> {
+	/**
+	 * 
+	 * @return a new T instance, each time the {@link #build()} method is
+	 *         called.
+	 * @throws Exception
+	 *             The builder may throw a checked exception, coming from the T
+	 *             class constructor.
+	 */
 	T build() throws Exception;
 }
