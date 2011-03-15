@@ -1,7 +1,7 @@
 # BuilderGen
 
 ## Intro
-BuilderGen uses APT and CoreModel to generate builders (following Josh Bloch's Builder Pattern) at compile time.
+BuilderGen uses [APT](http://download.oracle.com/javase/6/docs/technotes/guides/apt/index.html) and [CodeModel](http://codemodel.java.net/nonav/apidocs/com/sun/codemodel/JCodeModel.html) to generate builders (following Josh Bloch's Builder Pattern) at compile time.
 
 ## Steps
 
