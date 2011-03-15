@@ -21,9 +21,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Should be used on a constructor in a {@link Buildable} annotated class. This
- * annotation defines the constructor that the generated builder should use,
- * when there are more than one not private constructor.
+ * Use on a constructor in a {@link Buildable} annotated class.<br />
+ * <br />
+ * This annotation defines the constructor that the generated {@link Builder} will
+ * use, if there are more than one accessible constructors.
  * 
  * @author Pierre-Yves Ricau (py.ricau at gmail.com)
  */

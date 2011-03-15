@@ -50,7 +50,9 @@ public class ModelBuilder {
 			JClass narrowedInterface = builderInterface.narrow(buildableClass);
 
 			builderClass._implements(narrowedInterface);
-
+			
+			
+			
 			List<? extends VariableElement> parameters = constructor.getParameters();
 			for (VariableElement parameter : parameters) {
 				String paramName = parameter.getSimpleName().toString();
@@ -64,7 +66,7 @@ public class ModelBuilder {
 						.assign(_this().ref(setterField), setterParam) //
 						._return(_this());
 			}
-
+			
 			JMethod buildMethod = builderClass.method(JMod.PUBLIC, buildableClass, "build");
 
 			List<? extends TypeMirror> thrownTypes = constructor.getThrownTypes();
@@ -72,7 +74,7 @@ public class ModelBuilder {
 				JClass thrownClass = codeModel.ref(thrownType.toString());
 				buildMethod._throws(thrownClass);
 			}
-
+			
 			JBlock buildBody = buildMethod.body();
 			JInvocation newBuildable = JExpr._new(buildableClass);
 

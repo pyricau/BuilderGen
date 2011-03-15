@@ -67,8 +67,6 @@ public class BuildableValidator {
 				}
 			}
 		}
-
-		// TODO Validation
 		return valid.isValid();
 	}
 
