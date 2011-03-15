@@ -21,5 +21,5 @@ package info.piwai.buildergen.api;
  * @author Pierre-Yves Ricau (py.ricau at gmail.com)
  */
 public interface Builder<T> {
-	T build();
+	T build() throws Exception;
 }

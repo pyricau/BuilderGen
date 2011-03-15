@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package info.piwai.buildergen.processor;
+package info.piwai.buildergen.processing;
 
 import info.piwai.buildergen.api.Buildable;
 import info.piwai.buildergen.generation.SourceGenerator;
@@ -60,6 +60,7 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 
 		Set<TypeElement> validatedElements = new HashSet<TypeElement>();
 		// TODO Validation
+		// TODO Forbid inner types
 		for (TypeElement annotatedElement : annotatedElements) {
 			validatedElements.add(annotatedElement);
 		}

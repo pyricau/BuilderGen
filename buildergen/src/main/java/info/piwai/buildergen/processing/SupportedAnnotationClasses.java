@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package info.piwai.buildergen.processor;
+package info.piwai.buildergen.processing;
 
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
