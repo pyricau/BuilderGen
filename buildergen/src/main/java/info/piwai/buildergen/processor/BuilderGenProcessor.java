@@ -16,8 +16,11 @@
 package info.piwai.buildergen.processor;
 
 import info.piwai.buildergen.api.Buildable;
-import info.piwai.buildergen.generation.ModelGenerator;
+import info.piwai.buildergen.generation.SourceGenerator;
+import info.piwai.buildergen.modeling.ModelBuilder;
 
+import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.processing.Filer;
@@ -28,12 +31,14 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
+import javax.tools.Diagnostic.Kind;
 
+import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JCodeModel;
 
 @SupportedAnnotationClasses(Buildable.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
-public class BuilderGenProcessor extends AnnotatedAbstractProcessor{
+public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -47,20 +52,44 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor{
 
 	public boolean processThrowing(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) throws Exception {
 		printCompileNote();
+
+		@SuppressWarnings("unchecked")
+		Set<TypeElement> annotatedElements = (Set<TypeElement>) roundEnv.getElementsAnnotatedWith(Buildable.class);
+
+		printNumberOfBuildables(annotatedElements);
+
+		Set<TypeElement> validatedElements = new HashSet<TypeElement>();
+		// TODO Validation
+		for (TypeElement annotatedElement : annotatedElements) {
+			validatedElements.add(annotatedElement);
+		}
+
+		JCodeModel codeModel = buildModel(validatedElements);
 		
-		JCodeModel codeModel = new JCodeModel();
-		
-		
-		Filer filer = processingEnv.getFiler();
-		ModelGenerator modelGenerator = new ModelGenerator(filer);
-		modelGenerator.generate(codeModel);
-		
+		generateSources(codeModel);
+
 		return false;
 	}
-	
+
+	private JCodeModel buildModel(Set<TypeElement> validatedElements) throws JClassAlreadyExistsException {
+		ModelBuilder modelBuild = new ModelBuilder();
+		return modelBuild.build(validatedElements);
+	}
+
 	private void printCompileNote() {
 		Messager messager = processingEnv.getMessager();
 		messager.printMessage(Diagnostic.Kind.NOTE, "BuilderGen is processing annotations");
+	}
+
+	private void printNumberOfBuildables(Set<?> buildableElements) {
+		Messager messager = processingEnv.getMessager();
+		messager.printMessage(Kind.NOTE, "Found " + buildableElements.size() + " Buildable classes");
+	}
+
+	private void generateSources(JCodeModel codeModel) throws IOException {
+		Filer filer = processingEnv.getFiler();
+		SourceGenerator sourceGenerator = new SourceGenerator(filer);
+		sourceGenerator.generate(codeModel);
 	}
 
 	private void printError(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv, Exception e) {
@@ -80,7 +109,5 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor{
 		Element element = roundEnv.getElementsAnnotatedWith(annotations.iterator().next()).iterator().next();
 		messager.printMessage(Diagnostic.Kind.ERROR, "Unexpected annotation processing exception (not related to this element, but otherwise it wouldn't show up in eclipse) : " + errorMessage, element);
 	}
-
-
 
 }

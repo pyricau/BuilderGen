@@ -8,7 +8,6 @@
 	<packaging>jar</packaging>
 	<name>BuilderGen</name>
 	<description>Generation of builders using @Builder annotation</description>
-
 	<url>https://github.com/pyricau/BuilderGen</url>
 
 	<properties>
