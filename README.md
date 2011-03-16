@@ -3,7 +3,7 @@
 ## Intro
 BuilderGen uses [APT](http://download.oracle.com/javase/6/docs/technotes/guides/apt/index.html) and [CodeModel](http://codemodel.java.net/) to generate builders at compile time. The builders implement Josh Bloch's Builder Pattern from [Effective Java](http://java.sun.com/docs/books/effective/).
 
-If you wonder how it actually works, read the dedicated [wiki page](wiki/How it works).
+If you wonder how it actually works, read the dedicated [wiki page](https://github.com/pyricau/BuilderGen/wiki/How it works).
 
 ## 3 simple steps
 
