@@ -24,6 +24,12 @@ import javax.tools.JavaFileObject;
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JPackage;
 
+/**
+ * A binder between APT and CodeModel : CodeModel needs an {@link OutputStream} to
+ * generate sources. This {@link OutputStream} is opened using the APT {@link Filer} util.
+ * 
+ * @author Pierre-Yves Ricau (py.ricau at gmail.com)
+ */
 public class SourceCodewriter extends CodeWriter {
 
 	private final Filer filer;

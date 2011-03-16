@@ -15,14 +15,29 @@
  */
 package info.piwai.buildergen.validation;
 
+/**
+ * Helper class to deal with {@link BuildableValidator} validation state. The
+ * {@link #isValid()} method always return true, until the {@link #invalidate()}
+ * method has been called.
+ * 
+ * @author Pierre-Yves Ricau (py.ricau at gmail.com)
+ */
 public class IsValid {
-	
+
 	private boolean valid = true;
-	
+
+	/**
+	 * Invalidates this instance of {@link IsValid}. After {@link #invalidate()}
+	 * has been called , {@link IsValid} will no longer return true.
+	 */
 	public void invalidate() {
 		valid = false;
 	}
 
+	/**
+	 * @return true as long as the {@link #invalidate()} method has not been
+	 *         called.
+	 */
 	public boolean isValid() {
 		return valid;
 	}

@@ -49,6 +49,9 @@ import com.sun.codemodel.JCodeModel;
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 
+	/**
+	 * Processes the {@link Buildable} annotated elements using the roundEnv param.
+	 */
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		try {

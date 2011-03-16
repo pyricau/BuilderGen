@@ -1,3 +1,18 @@
+/*
+ * Copyright 2011 Pierre-Yves Ricau (py.ricau at gmail.com)
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package info.piwai.buildergen.validation;
 
 import info.piwai.buildergen.api.Build;
@@ -20,6 +35,12 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 
+/**
+ * Validates a {@link Buildable} annotated {@link TypeElement}, and print the
+ * corresponding compilation error messages if necessary.
+ * 
+ * @author Pierre-Yves Ricau (py.ricau at gmail.com)
+ */
 public class BuildableValidator {
 
 	private final ProcessingEnvironment processingEnv;
@@ -30,6 +51,15 @@ public class BuildableValidator {
 		this.elementHelper = elementHelper;
 	}
 
+	/**
+	 * Validates a {@link Buildable} annotated {@link TypeElement}, and print
+	 * the corresponding compilation error messages if necessary.
+	 * 
+	 * @param element
+	 *            a {@link TypeElement} annotated with {@link Buildable}
+	 * @return true is the element is valid and the builder should be generated,
+	 *         false otherwise
+	 */
 	public boolean validate(TypeElement element) {
 
 		IsValid valid = new IsValid();
