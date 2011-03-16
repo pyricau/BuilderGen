@@ -5,7 +5,7 @@ BuilderGen uses [APT](http://download.oracle.com/javase/6/docs/technotes/guides/
 
 ## 3 simple steps
 
-* Configure your project to use BuilderGen annotation processing (instructions [in the wiki](https://github.com/pyricau/BuilderGen/wiki)!)
+* Configure your project to use BuilderGen annotation processing. Instructions [in the wiki](https://github.com/pyricau/BuilderGen/wiki).
 * Add @Buildable to any class you wish.
 * A builder is automatically created for this class.
 
@@ -32,7 +32,7 @@ BuilderGen automatically generates a PersonBuilder, and you can now do the follo
     Person john42 = builder.name("John Smith").age(42).build();
     Person john69 = builder.age(69).build();
     
-Want to get started with BuilderGen ? Read [the wiki](https://github.com/pyricau/BuilderGen/wiki)!
+[Get started](https://github.com/pyricau/BuilderGen/wiki) with BuilderGen!
     
 ## Generated code
 
