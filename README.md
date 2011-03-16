@@ -11,7 +11,7 @@ BuilderGen uses [APT](http://download.oracle.com/javase/6/docs/technotes/guides/
 
 ## Code example
 
-Suppose you have a Person class :
+Suppose you have a Person class:
 
 	@Buildable
 	public class Person {
