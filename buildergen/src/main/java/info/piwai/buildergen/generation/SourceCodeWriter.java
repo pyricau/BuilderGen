@@ -30,11 +30,11 @@ import com.sun.codemodel.JPackage;
  * 
  * @author Pierre-Yves Ricau (py.ricau at gmail.com)
  */
-public class SourceCodewriter extends CodeWriter {
+public class SourceCodeWriter extends CodeWriter {
 
 	private final Filer filer;
 
-	public SourceCodewriter(Filer filer) {
+	public SourceCodeWriter(Filer filer) {
 		this.filer = filer;
 	}
 

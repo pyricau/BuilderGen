@@ -49,7 +49,7 @@ public class SourceGenerator {
 	 */
 	public void generate(JCodeModel codeModel) throws IOException {
 
-		SourceCodewriter sourceCodeWriter = new SourceCodewriter(filer);
+		SourceCodeWriter sourceCodeWriter = new SourceCodeWriter(filer);
 
 		PrologCodeWriter prologCodeWriter = new PrologCodeWriter(sourceCodeWriter, HEADER_WARNING);
 
