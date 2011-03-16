@@ -6,7 +6,7 @@ BuilderGen uses [APT](http://download.oracle.com/javase/6/docs/technotes/guides/
 ## 3 simple steps
 
 * Configure your project to use BuilderGen annotation processing. Instructions [in the wiki](https://github.com/pyricau/BuilderGen/wiki).
-* Add '''@Buildable''' to any class you wish.
+* Add ```@Buildable``` to any class you wish.
 * A builder is automatically created for this class.
 
 ## Code example
