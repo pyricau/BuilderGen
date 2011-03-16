@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package info.piwai.buildergen;
+package info.piwai.buildergen.bean;
 
 import info.piwai.buildergen.bean.CheckedExceptionBeanBuilder;
 

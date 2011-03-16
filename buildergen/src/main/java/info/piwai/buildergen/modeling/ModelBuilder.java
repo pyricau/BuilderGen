@@ -18,11 +18,13 @@ package info.piwai.buildergen.modeling;
 import static com.sun.codemodel.JExpr._this;
 import info.piwai.buildergen.api.Buildable;
 import info.piwai.buildergen.api.Builder;
+import info.piwai.buildergen.api.Mandatory;
 import info.piwai.buildergen.api.UncheckedBuilder;
 import info.piwai.buildergen.helper.ElementHelper;
 import info.piwai.buildergen.processing.BuilderGenProcessor;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -44,6 +46,7 @@ import com.sun.codemodel.JFieldVar;
 import com.sun.codemodel.JInvocation;
 import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
+import com.sun.codemodel.JType;
 import com.sun.codemodel.JVar;
 
 /**
@@ -119,6 +122,13 @@ public class ModelBuilder {
 						.append(" instance, to enable chained calls.");
 			}
 
+			List<VariableElement> mandatoryParameters = new ArrayList<VariableElement>();
+			for (VariableElement parameter : parameters) {
+				if (parameter.getAnnotation(Mandatory.class) != null) {
+					mandatoryParameters.add(parameter);
+				}
+			}
+
 			JMethod buildMethod = builderClass.method(JMod.PUBLIC, buildableClass, "build");
 
 			JDocComment javadoc = buildMethod.javadoc() //
@@ -171,11 +181,66 @@ public class ModelBuilder {
 
 			buildBody._return(newBuildable);
 
-			JMethod createMethod = builderClass.method(JMod.PUBLIC | JMod.STATIC, builderClass, "create");
-			createMethod.body()._return(JExpr._new(builderClass));
+			JClass mandatoryClass = codeModel.ref(Mandatory.class);
+			if (mandatoryParameters.size() != 0) {
+				JMethod builderConstructor = builderClass.constructor(JMod.PUBLIC);
+				JBlock constructorBody = builderConstructor.body();
 
-			createMethod.javadoc() //
-					.append("Static factory method for ") //
+				JDocComment constructorJavadoc = builderConstructor.javadoc() //
+						.append("Constructor with @") //
+						.append(mandatoryClass) //
+						.append(" parameters.") //
+						
+				;
+
+				for (VariableElement parameter : mandatoryParameters) {
+					String paramName = parameter.getSimpleName().toString();
+					JFieldVar paramField = builderClass.fields().get(paramName);
+					JType paramClass = paramField.type();
+					JVar constructorParam = builderConstructor.param(paramClass, paramName);
+
+					constructorBody.assign(_this().ref(paramField), constructorParam);
+
+					constructorJavadoc.addParam(constructorParam) //
+							.append("the value for the ") //
+							.append(paramName) //
+							.append(" @").append(mandatoryClass) //
+							.append(" constructor parameter of the ") //
+							.append(buildableClass) //
+							.append(" class.") //
+					;
+				}
+			}
+
+			JMethod createMethod = builderClass.method(JMod.PUBLIC | JMod.STATIC, builderClass, "create");
+			JBlock createBody = createMethod.body();
+
+			JDocComment createJavadoc = createMethod.javadoc();
+
+			JInvocation newBuilder = JExpr._new(builderClass);
+			if (mandatoryParameters.size() != 0) {
+				for (VariableElement parameter : mandatoryParameters) {
+					String paramName = parameter.getSimpleName().toString();
+					JFieldVar paramField = builderClass.fields().get(paramName);
+					JType paramClass = paramField.type();
+
+					JVar createParam = createMethod.param(paramClass, paramName);
+
+					newBuilder.arg(createParam);
+
+					createJavadoc.addParam(createParam) //
+							.append("the value for the ") //
+							.append(paramName) //
+							.append(" @").append(mandatoryClass) //
+							.append(" constructor parameter of the ") //
+							.append(buildableClass) //
+							.append(" class.") //
+					;
+				}
+			}
+			createBody._return(newBuilder);
+
+			createJavadoc.append("Static factory method for ") //
 					.append(builderClass) //
 					.append(" instances.") //
 					.addReturn() //
@@ -184,34 +249,38 @@ public class ModelBuilder {
 					.append("instance") //
 			;
 
-			builderClass //
-					.javadoc() //
-					.append("Builder for the ") //
-					.append(buildableClass) //
-					.append(" class.<br />\n") //
-					.append("<br />\n") //
-					.append("This builder implements Joshua Bloch's builder pattern, to let you create ") //
-					.append(buildableClass) //
-					.append(" instances \nwithout having to deal with complex constructor parameters.\n") //
-					.append("It has a fluid interface, which mean you can chain calls to its methods.<br />\n") //
-					.append("<br />\n") //
-					.append("You can create a new ") //
-					.append(builderClass) //
-					.append(" instance by calling the ") //
-					.append("{@link #create()}") //
-					.append(" static method, \nor its constructor directly.<br />\n") //
-					.append("<br />\n") //
-					.append("When done with settings fields, you can create ") //
-					.append(buildableClass) //
-					.append(" instances \nby calling the ") //
-					.append("{@link #build()}") //
-					.append(" method.\n") //
-					.append("Each call will return a new instance.<br />\n") //
-					.append("<br />\n") //
-					.append("You can call setters multiple times, and use this builder as an object template.") //
-			;
+			addBuilderClassJavadoc(builderClass, buildableClass);
 		}
 		return codeModel;
+	}
+
+	private void addBuilderClassJavadoc(JDefinedClass builderClass, JClass buildableClass) {
+		builderClass //
+				.javadoc() //
+				.append("Builder for the ") //
+				.append(buildableClass) //
+				.append(" class.<br />\n") //
+				.append("<br />\n") //
+				.append("This builder implements Joshua Bloch's builder pattern, to let you create ") //
+				.append(buildableClass) //
+				.append(" instances \nwithout having to deal with complex constructor parameters.\n") //
+				.append("It has a fluid interface, which mean you can chain calls to its methods.<br />\n") //
+				.append("<br />\n") //
+				.append("You can create a new ") //
+				.append(builderClass) //
+				.append(" instance by calling the ") //
+				.append("{@link #create()}") //
+				.append(" static method, \nor its constructor directly.<br />\n") //
+				.append("<br />\n") //
+				.append("When done with settings fields, you can create ") //
+				.append(buildableClass) //
+				.append(" instances \nby calling the ") //
+				.append("{@link #build()}") //
+				.append(" method.\n") //
+				.append("Each call will return a new instance.<br />\n") //
+				.append("<br />\n") //
+				.append("You can call setters multiple times, and use this builder as an object template.") //
+		;
 	}
 
 	private String extractBuilderFullyQualifiedName(TypeElement buildableElement) {

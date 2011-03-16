@@ -15,35 +15,38 @@
  */
 package info.piwai.buildergen.bean;
 
-import info.piwai.buildergen.api.Build;
 import info.piwai.buildergen.api.Buildable;
+import info.piwai.buildergen.api.Mandatory;
 
 @Buildable
-public class AnnotatedConstructorBean {
+public class MandatoryBean {
 	
-	private String field1;
-	private String field2;
+	private final int intField;
+	private final String stringField;
+	private final Integer integerField;
+	private final SomeObject someObjectField;
 	
-	public AnnotatedConstructorBean(String field1, String field2) {
-		this.field1 = field1;
-		this.field2 = field2;
-	}
-	
-	@Build
-	public AnnotatedConstructorBean(String field1) {
-		this.field1 = field1;
-		field2 = "yeah";
-	}
-	
-	
-	public AnnotatedConstructorBean() {
+	MandatoryBean(int intField, @Mandatory String stringField, Integer integerField, @Mandatory SomeObject someObjectField) {
+		this.intField = intField;
+		this.stringField = stringField;
+		this.integerField = integerField;
+		this.someObjectField = someObjectField;
 	}
 
-	public String getField1() {
-		return field1;
+	public int getIntField() {
+		return intField;
 	}
 
-	public String getField2() {
-		return field2;
+	public String getStringField() {
+		return stringField;
 	}
+
+	public Integer getIntegerField() {
+		return integerField;
+	}
+
+	public SomeObject getSomeObjectField() {
+		return someObjectField;
+	}
+	
 }

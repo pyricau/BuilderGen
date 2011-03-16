@@ -13,24 +13,32 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package info.piwai.buildergen;
+package info.piwai.buildergen.bean;
 
-import info.piwai.buildergen.bean.AnnotatedConstructorBean;
-import info.piwai.buildergen.bean.AnnotatedConstructorBeanBuilder;
+import info.piwai.buildergen.bean.SimpleBean;
+import info.piwai.buildergen.bean.SimpleBeanBuilder;
+import junit.framework.Assert;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author Pierre-Yves Ricau (py.ricau at gmail.com)
  */
-public class AnnotatedConstructorBeanTest {
-	
+public class SimpleBeanTest {
+
 	@Test
-	public void annotatedConstructorIsUsed() {
-		AnnotatedConstructorBean bean = AnnotatedConstructorBeanBuilder.create().field1("hello").build();
-		Assert.assertEquals("hello", bean.getField1());
-		Assert.assertEquals("yeah", bean.getField2());
+	public void newInstanceNotNull() {
+		Assert.assertNotNull(SimpleBeanBuilder.create().build());
+	}
+
+	@Test
+	public void notSameInstanceTwice() {
+		SimpleBeanBuilder builder = SimpleBeanBuilder.create();
+
+		SimpleBean bean1 = builder.build();
+		SimpleBean bean2 = builder.build();
+
+		Assert.assertNotSame(bean1, bean2);
 	}
 
 }

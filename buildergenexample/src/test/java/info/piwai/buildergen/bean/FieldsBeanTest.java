@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package info.piwai.buildergen;
+package info.piwai.buildergen.bean;
 
 import static org.junit.Assert.assertSame;
 import info.piwai.buildergen.bean.FieldsBean;
@@ -28,7 +28,7 @@ import org.junit.Test;
 public class FieldsBeanTest {
 
 	@Test
-	public void fieldsAssignmentTest() {
+	public void fieldsAssignment() {
 
 		Integer integerField = 42;
 		int intField = 69;
@@ -48,7 +48,7 @@ public class FieldsBeanTest {
 	}
 
 	@Test
-	public void fieldsReassignmentTest() {
+	public void fieldsReassignment() {
 		Integer integerField1 = 42;
 		Integer integerField2 = 69;
 		FieldsBean fieldsBean = FieldsBeanBuilder.create() //
