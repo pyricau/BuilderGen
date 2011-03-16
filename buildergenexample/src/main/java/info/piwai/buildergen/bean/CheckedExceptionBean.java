@@ -5,9 +5,9 @@ import info.piwai.buildergen.api.Buildable;
 import java.io.IOException;
 
 @Buildable
-public class ExceptionBean {
+public class CheckedExceptionBean {
 	
-	public ExceptionBean() throws IOException {
+	public CheckedExceptionBean() throws IOException {
 		throw new IOException();
 	}
 

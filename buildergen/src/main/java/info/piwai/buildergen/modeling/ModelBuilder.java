@@ -3,6 +3,7 @@ package info.piwai.buildergen.modeling;
 import static com.sun.codemodel.JExpr._this;
 import info.piwai.buildergen.api.Buildable;
 import info.piwai.buildergen.api.Builder;
+import info.piwai.buildergen.api.UncheckedBuilder;
 import info.piwai.buildergen.helper.ElementHelper;
 import info.piwai.buildergen.processing.BuilderGenProcessor;
 
@@ -50,11 +51,6 @@ public class ModelBuilder {
 			JDefinedClass builderClass = codeModel._class(builderFullyQualifiedName);
 
 			JClass buildableClass = codeModel.ref(buildableElement.getQualifiedName().toString());
-
-			JClass builderInterface = codeModel.ref(Builder.class);
-			JClass narrowedInterface = builderInterface.narrow(buildableClass);
-
-			builderClass._implements(narrowedInterface);
 
 			SimpleDateFormat isoDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
@@ -110,6 +106,8 @@ public class ModelBuilder {
 					.append(" instance.") //
 			;
 
+			boolean hasCheckedExceptions = false;
+			JClass runtimeException = codeModel.ref(RuntimeException.class);
 			List<? extends TypeMirror> thrownTypes = constructor.getThrownTypes();
 			for (TypeMirror thrownType : thrownTypes) {
 				JClass thrownClass = codeModel.ref(thrownType.toString());
@@ -120,7 +118,19 @@ public class ModelBuilder {
 						.append(buildableClass)//
 						.append("'s constructor throws this exception") //
 				;
+				if (!runtimeException.isAssignableFrom(thrownClass)) {
+					hasCheckedExceptions = true;
+				}
+			}
 
+			if (hasCheckedExceptions) {
+				JClass builderInterface = codeModel.ref(Builder.class);
+				JClass narrowedInterface = builderInterface.narrow(buildableClass);
+				builderClass._implements(narrowedInterface);
+			} else {
+				JClass builderInterface = codeModel.ref(UncheckedBuilder.class);
+				JClass narrowedInterface = builderInterface.narrow(buildableClass);
+				builderClass._implements(narrowedInterface);
 			}
 
 			JBlock buildBody = buildMethod.body();

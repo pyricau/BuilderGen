@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Pierre-Yves Ricau (py.ricau at gmail.com)
+ * Copyright 2010-2011 Pierre-Yves Ricau (py.ricau at gmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,19 +16,17 @@
 package info.piwai.buildergen.api;
 
 /**
- * The builders generated with {@link Buildable} implement
- * this interface.
+ * A {@link Builder} that does not throw Checked exceptions when its
+ * {@link Build} method is called. The builders generated with {@link Buildable}
+ * implement this interface, unless the {@link Buildable} annotated class has a
+ * constructor that declares throwing checked exceptions.
  * 
  * @author Pierre-Yves Ricau (py.ricau at gmail.com)
  */
-public interface Builder<T> {
+public interface UncheckedBuilder<T> extends Builder<T> {
 	/**
-	 * 
 	 * @return a new T instance, each time the {@link #build()} method is
 	 *         called.
-	 * @throws Exception
-	 *             The builder may throw a checked exception, coming from the T
-	 *             class constructor.
 	 */
-	T build() throws Exception;
+	T build();
 }

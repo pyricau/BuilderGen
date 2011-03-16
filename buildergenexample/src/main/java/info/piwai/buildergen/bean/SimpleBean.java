@@ -12,7 +12,6 @@ public class SimpleBean {
 	
 	@Build
 	protected SimpleBean(int test) {
-		
 	}
 
 }

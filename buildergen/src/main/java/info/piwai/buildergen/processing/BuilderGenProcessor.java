@@ -90,7 +90,7 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 	}
 
 	private Set<TypeElement> validateElements(Set<TypeElement> annotatedElements) {
-		BuildableValidator validator = new BuildableValidator(processingEnv.getMessager(), new ElementHelper());
+		BuildableValidator validator = new BuildableValidator(processingEnv, new ElementHelper());
 
 		Set<TypeElement> validatedElements = new HashSet<TypeElement>();
 		for (TypeElement annotatedElement : annotatedElements) {
