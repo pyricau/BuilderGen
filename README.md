@@ -1,13 +1,13 @@
 # BuilderGen
 
 ## Intro
-BuilderGen uses [APT](http://download.oracle.com/javase/6/docs/technotes/guides/apt/index.html) and [CodeModel](http://codemodel.java.net/nonav/apidocs/com/sun/codemodel/JCodeModel.html) to generate builders (following Josh Bloch's Builder Pattern) at compile time.
+BuilderGen uses [APT](http://download.oracle.com/javase/6/docs/technotes/guides/apt/index.html) and [CodeModel](http://codemodel.java.net/nonav/apidocs/com/sun/codemodel/JCodeModel.html) to generate builders at compile time. The builders implement Josh Bloch's Builder Pattern from [Effective Java](http://java.sun.com/docs/books/effective/).
 
-## Steps
+## 3 simple steps
 
-* Configure your project to use BuilderGen annotation processing (no doc yet, please look at the example)
+* Configure your project to use BuilderGen annotation processing (instructions [in the wiki](https://github.com/pyricau/BuilderGen/wiki)!)
 * Add @Buildable to any class you wish.
-* A builder is automatically created.
+* A builder is automatically created for this class.
 
 ## Code example
 
@@ -32,8 +32,8 @@ BuilderGen automatically generates a PersonBuilder, and you can now do the follo
     Person john42 = builder.name("John Smith").age(42).build();
     Person john69 = builder.age(69).build();
     
-If the class has multiple constructors, you should annotate the one to use with @Build.
-
+Want to get started with BuilderGen ? Read [the wiki](https://github.com/pyricau/BuilderGen/wiki)!
+    
 ## Generated code
 
 Have a look at the nicely generated PersonBuilder code :
