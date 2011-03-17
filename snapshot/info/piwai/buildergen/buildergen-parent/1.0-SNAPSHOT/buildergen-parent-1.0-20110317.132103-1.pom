@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>info.piwai.buildergen</groupId>
+	<artifactId>buildergen-parent</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>BuilderGen Parent</name>
+	<description>The parent POM for the BuilderGen project.</description>
+	<url>https://github.com/pyricau/BuilderGen</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!--Trick to deploy releases (using mvn release:perform) to the local file 
+			system. The release is actually performed from target/checkout, which is 
+			why we need those ../../ . Notice that after deployment, one must commit 
+			and push to the git repository. -->
+		<altDeploymentRepository>release-repo::default::file:../../release</altDeploymentRepository>
+	</properties>
+
+	<modules>
+		<module>buildergen</module>
+		<module>buildergen-example</module>
+		<module>buildergen-api</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>info.piwai.buildergen</groupId>
+				<artifactId>buildergen</artifactId>
+				<version>${project.version}</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>info.piwai.buildergen</groupId>
+				<artifactId>buildergen-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.sun.codemodel</groupId>
+				<artifactId>codemodel</artifactId>
+				<version>2.4</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.8.1</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-all</artifactId>
+				<version>1.8.5</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.3.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>2.1.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.bsc.maven</groupId>
+					<artifactId>maven-processor-plugin</artifactId>
+					<version>1.3.4</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>release-repo</id>
+			<url>https://github.com/pyricau/BuilderGen/raw/master/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshot-repo</id>
+			<url>https://github.com/pyricau/BuilderGen/raw/master/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<scm>
+		<connection>scm:git:git@github.com:pyricau/BuilderGen.git</connection>
+		<developerConnection>scm:git:git@github.com:pyricau/BuilderGen.git</developerConnection>
+		<url>scm:git:git@github.com:pyricau/BuilderGen.git</url>
+	</scm>
+
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>maven-annotation-plugin-repo</id>
+			<url>http://maven-annotation-plugin.googlecode.com/svn/trunk/mavenrepo</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<profiles>
+		<profile>
+			<id>deploy-snapshot</id>
+			<properties>
+				<altDeploymentRepository>snapshot-repo::default::file:snapshot</altDeploymentRepository>
+			</properties>
+
+		</profile>
+	</profiles>
+
+
+</project>
