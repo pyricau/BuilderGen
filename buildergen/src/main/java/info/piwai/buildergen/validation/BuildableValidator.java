@@ -25,6 +25,7 @@ import java.util.Set;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
@@ -34,6 +35,7 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
+import javax.tools.Diagnostic.Kind;
 
 /**
  * Validates a {@link Buildable} annotated {@link TypeElement}, and print the
@@ -78,6 +80,17 @@ public class BuildableValidator {
 			valid.invalidate();
 			printBuildableError(element, "%s cannot be used on an abstract class");
 		}
+		
+		Buildable buildableAnnotation = element.getAnnotation(Buildable.class);
+		String builderNameSuffix = buildableAnnotation.value();
+		if ("".equals(builderNameSuffix)) {
+			valid.invalidate();
+			AnnotationMirror annotationMirror = findAnnotationMirror(element, Buildable.class);
+			AnnotationValue annotationValue = annotationMirror.getElementValues().values().iterator().next();
+			processingEnv.getMessager().printMessage(Kind.ERROR, "The builder name suffix should not be an empty String", element, annotationMirror, annotationValue);
+		}
+		
+		
 
 		Set<ExecutableElement> constructors = elementHelper.findAccessibleConstructors(element);
 
@@ -109,14 +122,16 @@ public class BuildableValidator {
 
 			if (builderConstructor != null) {
 				List<? extends TypeMirror> thrownTypes = builderConstructor.getThrownTypes();
-				Types typeUtils = processingEnv.getTypeUtils();
-				Elements elementUtils = processingEnv.getElementUtils();
-				TypeElement exceptionElement = elementUtils.getTypeElement(Exception.class.getName());
-				TypeMirror exceptionMirror = exceptionElement.asType();
-				for (TypeMirror thrownType : thrownTypes) {
-					if (!typeUtils.isSubtype(thrownType, exceptionMirror)) {
-						valid.invalidate();
-						processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "The constructor used by the builder can only throw subtypes of Exception", builderConstructor);
+				if (thrownTypes.size() > 0) {
+					Types typeUtils = processingEnv.getTypeUtils();
+					Elements elementUtils = processingEnv.getElementUtils();
+					TypeElement exceptionElement = elementUtils.getTypeElement(Exception.class.getName());
+					TypeMirror exceptionMirror = exceptionElement.asType();
+					for (TypeMirror thrownType : thrownTypes) {
+						if (!typeUtils.isSubtype(thrownType, exceptionMirror)) {
+							valid.invalidate();
+							processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "The constructor used by the builder can only throw subtypes of Exception", builderConstructor);
+						}
 					}
 				}
 			}
