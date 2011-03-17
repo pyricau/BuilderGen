@@ -1,4 +1,4 @@
-# BuilderGen
+# BuilderGen 0.2
 
 ## Intro
 BuilderGen uses [APT](http://download.oracle.com/javase/6/docs/technotes/guides/apt/index.html) and [CodeModel](http://codemodel.java.net/) to generate builders at compile time. The builders implement Josh Bloch's Builder Pattern from [Effective Java](http://java.sun.com/docs/books/effective/).
