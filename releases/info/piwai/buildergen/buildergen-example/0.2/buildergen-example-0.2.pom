@@ -1,0 +1,69 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>info.piwai.buildergen</groupId>
+		<artifactId>buildergen-parent</artifactId>
+		<version>0.2</version>
+	</parent>
+
+	<groupId>info.piwai.buildergen</groupId>
+	<artifactId>buildergen-example</artifactId>
+	<packaging>jar</packaging>
+	<name>BuilderGenExample</name>
+	<description>Example project using BuilderGen</description>
+	<url>https://github.com/pyricau/BuilderGen</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>info.piwai.buildergen</groupId>
+			<artifactId>buildergen-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>info.piwai.buildergen</groupId>
+			<artifactId>buildergen</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<compilerArgument>-proc:none</compilerArgument>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.bsc.maven</groupId>
+				<artifactId>maven-processor-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>process</id>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<phase>generate-sources</phase>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>info.piwai.buildergen</groupId>
+						<artifactId>buildergen</artifactId>
+						<version>${project.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
