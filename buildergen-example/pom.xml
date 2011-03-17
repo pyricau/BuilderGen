@@ -2,9 +2,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<parent>
+		<groupId>info.piwai.buildergen</groupId>
+		<artifactId>buildergen-parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+
 	<groupId>info.piwai.buildergen</groupId>
-	<artifactId>buildergenexample</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<artifactId>buildergen-example</artifactId>
 	<packaging>jar</packaging>
 	<name>BuilderGenExample</name>
 	<description>Example project using BuilderGen</description>
@@ -14,29 +19,18 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>maven-annotation-plugin-repo</id>
-			<url>http://maven-annotation-plugin.googlecode.com/svn/trunk/mavenrepo</url>
-		</pluginRepository>
-	</pluginRepositories>
-
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
-			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>info.piwai.buildergen</groupId>
+			<artifactId>buildergen-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>info.piwai.buildergen</groupId>
 			<artifactId>buildergen</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<!-- classifier should not be commented, since we only need the API to compile 
-				and run. However, M2Eclipse seems not to be able to integrate a classifier 
-				JAR from a side project when running from Eclipse (junit tests as well as 
-				a main method) -->
-			<!-- <classifier>api</classifier> -->
 		</dependency>
 	</dependencies>
 
@@ -44,7 +38,6 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
@@ -54,22 +47,20 @@
 			<plugin>
 				<groupId>org.bsc.maven</groupId>
 				<artifactId>maven-processor-plugin</artifactId>
-				<version>1.3.4</version>
 				<executions>
 					<execution>
 						<id>process</id>
 						<goals>
 							<goal>process</goal>
 						</goals>
-						<phase>process-sources</phase>
+						<phase>generate-sources</phase>
 					</execution>
 				</executions>
 				<dependencies>
 					<dependency>
 						<groupId>info.piwai.buildergen</groupId>
 						<artifactId>buildergen</artifactId>
-						<version>1.0-SNAPSHOT</version>
-						<scope>compile</scope>
+						<version>${project.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
