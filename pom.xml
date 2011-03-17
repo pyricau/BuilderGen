@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>info.piwai.buildergen</groupId>
 	<artifactId>buildergen-parent</artifactId>
-	<version>0.3-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>BuilderGen Parent</name>
 	<description>The parent POM for the BuilderGen project.</description>
@@ -12,9 +13,11 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!--project.release.type should be set to "releases" or "snapshots" -->
-		<project.release.type>releases</project.release.type>
-		<altDeploymentRepository>${project.release.type}-repo::default::file:../../${project.release.type}</altDeploymentRepository>
+		<!--Trick to deploy releases (using mvn release:perform) to the local file 
+			system. The release is actually performed from target/checkout, which is 
+			why we need those ../../ . Notice that after deployment, one must commit 
+			and push to the git repository. -->
+		<altDeploymentRepository>release-repo::default::file:../../release</altDeploymentRepository>
 	</properties>
 
 	<modules>
@@ -85,11 +88,11 @@
 
 	<distributionManagement>
 		<repository>
-			<id>releases-repo</id>
+			<id>release-repo</id>
 			<url>https://github.com/pyricau/BuilderGen/raw/master/releases</url>
 		</repository>
 		<snapshotRepository>
-			<id>snapshots-repo</id>
+			<id>snapshot-repo</id>
 			<url>https://github.com/pyricau/BuilderGen/raw/master/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
@@ -99,14 +102,24 @@
 		<developerConnection>scm:git:git@github.com:pyricau/BuilderGen.git</developerConnection>
 		<url>scm:git:git@github.com:pyricau/BuilderGen.git</url>
 	</scm>
-	
-	
+
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>maven-annotation-plugin-repo</id>
 			<url>http://maven-annotation-plugin.googlecode.com/svn/trunk/mavenrepo</url>
 		</pluginRepository>
 	</pluginRepositories>
+
+	<profiles>
+		<profile>
+			<id>deploy-snapshot</id>
+			<properties>
+				<altDeploymentRepository>snapshot-repo::default::file:snapshot</altDeploymentRepository>
+			</properties>
+
+		</profile>
+	</profiles>
 
 
 </project>
