@@ -50,7 +50,8 @@ import com.sun.codemodel.JCodeModel;
 public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 
 	/**
-	 * Processes the {@link Buildable} annotated elements using the roundEnv param.
+	 * Processes the {@link Buildable} annotated elements using the roundEnv
+	 * param.
 	 */
 	@Override
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -105,8 +106,14 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 	}
 
 	private JCodeModel buildModel(Set<TypeElement> validatedElements) throws JClassAlreadyExistsException {
-		ModelBuilder modelBuilder = new ModelBuilder(new ElementHelper());
-		return modelBuilder.build(validatedElements);
+		JCodeModel codeModel = new JCodeModel();
+		ModelBuilder modelBuilder = new ModelBuilder(codeModel, new ElementHelper());
+
+		for (TypeElement validatedElement : validatedElements) {
+			modelBuilder.buildClass(validatedElement);
+		}
+
+		return codeModel;
 	}
 
 	private void generateSources(JCodeModel codeModel) throws IOException {
@@ -117,8 +124,8 @@ public class BuilderGenProcessor extends AnnotatedAbstractProcessor {
 
 	private void printError(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv, Exception e) {
 		/*
-		 * TODO Error printing might need a bit of cleanup. Those tricks are used
-		 * so that we are sure the compilation error is given to the user.
+		 * TODO Error printing might need a bit of cleanup. Those tricks are
+		 * used so that we are sure the compilation error is given to the user.
 		 * Eclipse compiler wouldn't show it otherwise (as far as I can tell). I
 		 * know it sucks, any better solution is welcome.
 		 */
