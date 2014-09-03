@@ -32,9 +32,11 @@ public class Person {
 
 BuilderGen automatically generates a PersonBuilder, and you can now do the following: 
 
-    PersonBuilder builder = PersonBuilder.create();
-    Person john42 = builder.name("John Smith").age(42).build();
-    Person john69 = builder.age(69).build();
+```java
+PersonBuilder builder = PersonBuilder.create();
+Person john42 = builder.name("John Smith").age(42).build();
+Person john69 = builder.age(69).build();
+```
     
 [Get started](https://github.com/pyricau/BuilderGen/wiki) with BuilderGen!
     
