@@ -1,3 +1,5 @@
+## This project is not actively maintained.
+
 # BuilderGen 0.2
 
 ## Intro
